@@ -71,56 +71,61 @@
   to { opacity: 1; transform: scale(1); }
 }
 /* ---------- Orbiting tech icons (real orbital rotation) ----------
-   Transform-conflict-free layering:
-     .orbit-ring-cw/ccw  — rotates the whole ring (transform: rotate)
-       .orbit-slot       — polar coords via left/top; counter-rotates with
-                           `rotate: -angle` property so the child plane
-                           stays parallel to the ring center
-         .orbit-item     — NEVER rotated by orbit; only bob (translate)
-                           + pop-in (scale). Stays upright at all times.
+   Icons REVOLVE around the avatar but always stay UPRIGHT.
+   Each layer uses a DIFFERENT transform property so nothing overrides:
+     .orbit-ring     — `transform: rotate()`  : carries slots around the circle
+       .orbit-slot   — `rotate:` property      : counter-spin, cancels ring rotation
+         .orbit-item — `translate:` (bob) + `scale:` (pop/hover) : never rotated
+   All animations start at element creation → ring & counter are perfectly
+   in sync forever (same duration var, same start time, linear, infinite).
    --------------------------------------------------------------- */
 @keyframes ring-cw  { to { transform: rotate(360deg); } }
 @keyframes ring-ccw { to { transform: rotate(-360deg); } }
-/* slot counter-spin: cancels the ring rotation so slots' children stay level */
+/* slot counter-spin: cancels the ring rotation so chips stay level */
 @keyframes slot-counter-cw  { to { rotate: -360deg; } }
 @keyframes slot-counter-ccw { to { rotate: 360deg; } }
-/* gentle vertical bob for chips */
+/* gentle vertical bob for chips (translate property — composes with scale) */
 @keyframes chip-bob {
   0%, 100% { translate: 0 0; }
   50%      { translate: 0 -5px; }
 }
 @keyframes track-spin { to { transform: rotate(360deg); } }
 
+/* base rotation — runs from creation, never replaced */
 .orbit-ring-cw  { animation: ring-cw  var(--ring-dur, 36s) linear infinite; }
 .orbit-ring-ccw { animation: ring-ccw var(--ring-dur, 52s) linear infinite; }
 .orbit-slot.in-cw  { animation: slot-counter-cw  var(--ring-dur, 36s) linear infinite; }
 .orbit-slot.in-ccw { animation: slot-counter-ccw var(--ring-dur, 52s) linear infinite; }
-.orbit-item.orbit-live { animation: chip-bob 5.5s ease-in-out infinite; animation-delay: var(--bob-delay, 0s); }
 .orbit-track { animation: track-spin 60s linear infinite; }
 
-/* entrance: ring-level pop (scale on the ring's parent wrapper) — items never animate transforms that conflict with bob */
+/* entrance — pop runs ALONGSIDE rotation (same animation list, so the
+   rotation is never interrupted/restarted and stays in sync with slots) */
 @keyframes ring-pop {
-  0%   { opacity: 0; transform: scale(0.55); }
-  70%  { opacity: 1; }
-  100% { opacity: 1; transform: scale(1); }
+  from { opacity: 0; scale: 0.55; }
+  to   { opacity: 1; scale: 1; }
 }
-.js .orbit-ring { opacity: 0; }
-.orbit-ring.pop-in {
-  animation: ring-pop calc(0.9s * var(--motion-scale)) var(--ease-spring) both;
-  animation-delay: calc(var(--ring-i, 0) * 160ms + 500ms);
+.orbit-ring-cw.pop-in {
+  animation: ring-pop calc(0.9s * var(--motion-scale)) var(--ease-spring) backwards,
+             ring-cw  var(--ring-dur, 36s) linear infinite;
+  animation-delay: calc(var(--ring-i, 0) * 160ms + 500ms), 0s;
 }
-.orbit-ring.orbit-live { opacity: 1; }
-.js .orbit-item { opacity: 0; }
-.orbit-item.item-in {
-  animation: item-pop calc(0.6s * var(--motion-scale)) var(--ease-spring) both;
-  animation-delay: calc(var(--i, 0) * 90ms + 600ms);
+.orbit-ring-ccw.pop-in {
+  animation: ring-pop calc(0.9s * var(--motion-scale)) var(--ease-spring) backwards,
+             ring-ccw var(--ring-dur, 52s) linear infinite;
+  animation-delay: calc(var(--ring-i, 0) * 160ms + 500ms), 0s;
 }
+
+/* item entrance — pop + bob in ONE list from creation; fill `backwards`
+   hides the chip during its delay, then scale is free for hover */
 @keyframes item-pop {
-  0%   { opacity: 0; scale: 0.3; }
-  70%  { opacity: 1; }
-  100% { opacity: 1; scale: 1; }
+  from { opacity: 0; scale: 0.3; }
+  to   { opacity: 1; scale: 1; }
 }
-.orbit-item.orbit-live { opacity: 1; }
+.orbit-item.item-in {
+  animation: item-pop calc(0.6s * var(--motion-scale)) var(--ease-spring) backwards,
+             chip-bob 5.5s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 90ms + 600ms), var(--bob-delay, 0s);
+}
 
 /* ---------- Typing cursor ---------- */
 .typed-cursor {
@@ -390,7 +395,7 @@
   }
   .js [data-reveal].revealed { transition: opacity 0.4s ease !important; }
   .blob, .skills-shimmer, .badge-featured,
-  .orbit-ring-cw, .orbit-ring-ccw, .orbit-item.orbit-live, .orbit-track,
-  .orbit-slot.in-cw, .orbit-slot.in-ccw, .avatar-ring { animation: none !important; }
-  .js .orbit-ring, .js .orbit-item { opacity: 1; }
+  .orbit-ring, .orbit-slot, .orbit-item, .orbit-track,
+  .avatar-ring { animation: none !important; }
+  .orbit-ring, .orbit-item { opacity: 1 !important; scale: 1 !important; }
 }

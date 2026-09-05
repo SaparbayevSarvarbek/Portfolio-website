@@ -364,7 +364,8 @@ html.custom-cursor .cursor-dot, html.custom-cursor .cursor-ring { opacity: 1; }
   pointer-events: none;
 }
 
-/* chip: only bob + hover scale — never rotated by the orbit */
+/* chip: only bob (translate) + hover scale — never rotated by the orbit;
+   entrance opacity handled by item-pop (backwards fill) */
 .orbit-item {
   position: absolute; inset: 0;
   display: grid; place-items: center;
@@ -373,11 +374,9 @@ html.custom-cursor .cursor-dot, html.custom-cursor .cursor-ring { opacity: 1; }
   border-radius: 50%;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   pointer-events: auto;
-  opacity: 0;
   transition: border-color 0.4s var(--ease-soft), box-shadow 0.4s var(--ease-soft), scale 0.35s var(--ease-spring);
   will-change: translate, scale;
 }
-.orbit-item.orbit-live { opacity: 1; }
 .orbit-item svg {
   width: 26px; height: 26px;
   color: var(--muted);

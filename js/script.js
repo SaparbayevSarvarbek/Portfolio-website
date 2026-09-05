@@ -394,30 +394,19 @@ function initPreloader() {
   const run = () => {
     pre.classList.add("done");
     $$(".hero-el").forEach((el, i) => el.style.setProperty("--d", i));
-    const rings = $$(".orbit-ring");
-    const items = $$(".orbit-item");
     setTimeout(() => {
       $("#home").classList.add("hero-enter");
-      // rings pop in as a whole, then orbital rotation starts
-      rings.forEach((r, ri) => {
-        r.classList.add("pop-in");
-        setTimeout(() => r.classList.add("orbit-live"), 500 + ri * 160 + 950);
-      });
-      // items pop individually on top
-      items.forEach((o, i) => {
-        o.classList.add("item-in");
-        setTimeout(() => o.classList.add("orbit-live"), 600 + i * 90 + 640);
-      });
+      // ring & items simply gain entrance classes; rotation has been
+      // running since creation and is never interrupted
+      $$(".orbit-ring").forEach((r) => r.classList.add("pop-in"));
+      $$(".orbit-item").forEach((o) => o.classList.add("item-in"));
     }, 80);
     setTimeout(() => pre.remove(), 900);
     startTyping();
   };
   if (REDUCED) {
-    // no animation: everything visible immediately
     $("#home").classList.add("hero-enter");
     $$(".hero-el").forEach((el, i) => el.style.setProperty("--d", i));
-    $$(".orbit-ring").forEach((r) => r.classList.add("orbit-live"));
-    $$(".orbit-item").forEach((o) => o.classList.add("orbit-live"));
     pre.classList.add("done");
     startTyping();
     setTimeout(() => pre.remove(), 100);
