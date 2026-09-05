@@ -1,0 +1,396 @@
+/* ============================================================
+   ANIMATIONS — keyframes, easing, reveal system, motion scale
+   ============================================================ */
+
+:root {
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Global speed multiplier: 1 = normal, 0.5 = 2x faster, 2 = 2x slower */
+  --motion-scale: 1;
+}
+
+/* ---------- Preloader ---------- */
+.preloader {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid; place-items: center;
+  background: #0e1016;
+  transition: transform calc(0.7s * var(--motion-scale)) var(--ease-out), opacity calc(0.7s * var(--motion-scale)) var(--ease-out);
+}
+.preloader.done { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+.preloader-avatar {
+  width: 110px; height: 110px; border-radius: 50%; overflow: hidden;
+  border: 3px solid transparent;
+  background: linear-gradient(#0e1016, #0e1016) padding-box,
+              linear-gradient(135deg, #22c55e, #3b82f6 50%, #a855f7) border-box;
+  animation: preloader-pulse 1.2s var(--ease-soft) infinite;
+}
+.preloader-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@keyframes preloader-pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.35); }
+  50% { transform: scale(1.06); box-shadow: 0 0 34px 6px rgba(59, 130, 246, 0.25); }
+}
+
+/* ---------- Ambient blobs ---------- */
+@keyframes blob-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(9vw, 6vh) scale(1.12); }
+  66% { transform: translate(-7vw, 9vh) scale(0.94); }
+}
+@keyframes blob-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1.05); }
+  40% { transform: translate(-10vw, -7vh) scale(0.92); }
+  75% { transform: translate(8vw, -10vh) scale(1.14); }
+}
+@keyframes blob-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  45% { transform: translate(6vw, -8vh) scale(1.18); }
+  80% { transform: translate(-9vw, 4vh) scale(0.9); }
+}
+.blob-1 { animation: blob-drift-1 26s ease-in-out infinite; }
+.blob-2 { animation: blob-drift-2 30s ease-in-out infinite; }
+.blob-3 { animation: blob-drift-3 22s ease-in-out infinite; }
+
+/* ---------- Hero entrance (choreographed) ---------- */
+.js .hero-el { opacity: 0; }
+.js .hero-enter .hero-el {
+  animation: hero-blur-up calc(1s * var(--motion-scale)) var(--ease-out) forwards;
+  animation-delay: calc(var(--d, 0) * 90ms);
+}
+@keyframes hero-blur-up {
+  from { opacity: 0; transform: translateY(28px); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.js .hero-visual { opacity: 0; }
+.js .hero-enter .hero-visual {
+  animation: hero-avatar-in calc(1.1s * var(--motion-scale)) var(--ease-spring) forwards;
+  animation-delay: calc(var(--d, 5) * 90ms);
+}
+@keyframes hero-avatar-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* ---------- Orbiting tech icons (real orbital rotation) ----------
+   Transform-conflict-free layering:
+     .orbit-ring-cw/ccw  — rotates the whole ring (transform: rotate)
+       .orbit-slot       — polar coords via left/top; counter-rotates with
+                           `rotate: -angle` property so the child plane
+                           stays parallel to the ring center
+         .orbit-item     — NEVER rotated by orbit; only bob (translate)
+                           + pop-in (scale). Stays upright at all times.
+   --------------------------------------------------------------- */
+@keyframes ring-cw  { to { transform: rotate(360deg); } }
+@keyframes ring-ccw { to { transform: rotate(-360deg); } }
+/* slot counter-spin: cancels the ring rotation so slots' children stay level */
+@keyframes slot-counter-cw  { to { rotate: -360deg; } }
+@keyframes slot-counter-ccw { to { rotate: 360deg; } }
+/* gentle vertical bob for chips */
+@keyframes chip-bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 -5px; }
+}
+@keyframes track-spin { to { transform: rotate(360deg); } }
+
+.orbit-ring-cw  { animation: ring-cw  var(--ring-dur, 36s) linear infinite; }
+.orbit-ring-ccw { animation: ring-ccw var(--ring-dur, 52s) linear infinite; }
+.orbit-slot.in-cw  { animation: slot-counter-cw  var(--ring-dur, 36s) linear infinite; }
+.orbit-slot.in-ccw { animation: slot-counter-ccw var(--ring-dur, 52s) linear infinite; }
+.orbit-item.orbit-live { animation: chip-bob 5.5s ease-in-out infinite; animation-delay: var(--bob-delay, 0s); }
+.orbit-track { animation: track-spin 60s linear infinite; }
+
+/* entrance: ring-level pop (scale on the ring's parent wrapper) — items never animate transforms that conflict with bob */
+@keyframes ring-pop {
+  0%   { opacity: 0; transform: scale(0.55); }
+  70%  { opacity: 1; }
+  100% { opacity: 1; transform: scale(1); }
+}
+.js .orbit-ring { opacity: 0; }
+.orbit-ring.pop-in {
+  animation: ring-pop calc(0.9s * var(--motion-scale)) var(--ease-spring) both;
+  animation-delay: calc(var(--ring-i, 0) * 160ms + 500ms);
+}
+.orbit-ring.orbit-live { opacity: 1; }
+.js .orbit-item { opacity: 0; }
+.orbit-item.item-in {
+  animation: item-pop calc(0.6s * var(--motion-scale)) var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * 90ms + 600ms);
+}
+@keyframes item-pop {
+  0%   { opacity: 0; scale: 0.3; }
+  70%  { opacity: 1; }
+  100% { opacity: 1; scale: 1; }
+}
+.orbit-item.orbit-live { opacity: 1; }
+
+/* ---------- Typing cursor ---------- */
+.typed-cursor {
+  display: inline-block; width: 3px; height: 1.05em; margin-left: 4px;
+  vertical-align: -0.15em; border-radius: 2px;
+  background: linear-gradient(180deg, #22c55e, #3b82f6, #a855f7);
+  animation: blink-soft 1s var(--ease-soft) infinite;
+}
+@keyframes blink-soft { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
+
+/* ---------- Avatar ring & pulse ---------- */
+@keyframes ring-spin { to { rotate: 360deg; } }
+.avatar-ring { animation: ring-spin 7s linear infinite; }
+@keyframes avatar-breathe {
+  0%, 100% { opacity: 0.55; scale: 1; }
+  50% { opacity: 0.95; scale: 1.07; }
+}
+.avatar-glow { animation: avatar-breathe 4.5s ease-in-out infinite; }
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45); }
+  70% { box-shadow: 0 0 0 9px rgba(34, 197, 94, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+.pulse-dot { animation: pulse-ring 2s var(--ease-soft) infinite; }
+
+/* ---------- Scroll reveals ---------- */
+/* Hidden state ONLY under .js — content stays visible without JS. */
+.js [data-reveal]:not(.revealed) { opacity: 0; }
+
+.js [data-reveal="blur-up"]:not(.revealed) {
+  opacity: 0; transform: translateY(32px); filter: blur(10px);
+}
+.js [data-reveal="scale-in"]:not(.revealed) {
+  opacity: 0; transform: scale(0.92);
+}
+.js [data-reveal="slide-left"]:not(.revealed) { opacity: 0; transform: translateX(48px); }
+.js [data-reveal="slide-right"]:not(.revealed) { opacity: 0; transform: translateX(-48px); }
+.js [data-reveal="clip-up"]:not(.revealed) { opacity: 0; clip-path: inset(100% 0 0 0); }
+.js [data-reveal="split-words"]:not(.revealed) { opacity: 0; }
+
+/* Revealed state — unset everything so FLIP/tilt/hover transforms can act.
+   NOTE: project cards must NOT carry [data-reveal] themselves; the grid
+   wrapper handles their reveal (transform would conflict with tilt + FLIP). */
+.js [data-reveal].revealed {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  clip-path: none;
+  transition:
+    opacity calc(0.9s * var(--motion-scale)) var(--ease-out),
+    transform calc(1s * var(--motion-scale)) var(--ease-out),
+    filter calc(0.9s * var(--motion-scale)) var(--ease-out),
+    clip-path calc(1s * var(--motion-scale)) var(--ease-out);
+}
+
+/* Stagger children — wrapper carries [data-reveal], children get --i */
+.js [data-stagger]:not(.revealed) > * { opacity: 0; }
+.js [data-stagger].revealed > * {
+  animation: stagger-child calc(0.9s * var(--motion-scale)) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * var(--stagger, 80ms));
+}
+@keyframes stagger-child {
+  from { opacity: 0; transform: translateY(22px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Split words */
+.split-word { display: inline-block; opacity: 0; }
+.js [data-reveal="split-words"].revealed { opacity: 1; }
+[data-reveal="split-words"].revealed .split-word {
+  animation: word-rise calc(0.9s * var(--motion-scale)) var(--ease-out) both;
+  animation-delay: calc(var(--i) * 40ms);
+}
+@keyframes word-rise {
+  from { opacity: 0; transform: translateY(120%) rotate(3deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0); }
+}
+.split-words-mask { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: 0.12em; margin-bottom: -0.12em; }
+
+/* ---------- Section separator line ---------- */
+.sep-line {
+  position: absolute; left: 50%; top: 0; width: 62%; height: 1px;
+  transform: translateX(-50%) scaleX(0); transform-origin: center;
+  background: linear-gradient(90deg, transparent, var(--border) 30%, var(--a2) 50%, var(--border) 70%, transparent);
+  opacity: 0.7;
+  transition: transform calc(1.2s * var(--motion-scale)) var(--ease-out) 0.15s;
+}
+.sep-line.revealed, .section.revealed .sep-line { transform: translateX(-50%) scaleX(1); }
+
+/* ---------- Timeline ---------- */
+.timeline-progress {
+  transform-origin: top; transform: scaleY(0);
+  background: var(--grad);
+}
+@keyframes dot-ripple {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+.timeline-dot.lit::after {
+  content: ""; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid var(--a2); animation: dot-ripple calc(0.9s * var(--motion-scale)) var(--ease-out) forwards;
+}
+@keyframes dot-fill { from { transform: scale(0.2); } to { transform: scale(1); } }
+.timeline-dot.lit .dot-core { animation: dot-fill calc(0.6s * var(--motion-scale)) var(--ease-spring) both; }
+
+/* ---------- Skill pills wave + shimmer ---------- */
+.js .skill-pill:not(.pill-shown) { opacity: 0; }
+.skill-pill.pill-shown {
+  animation: pill-in calc(0.7s * var(--motion-scale)) var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * 25ms);
+}
+@keyframes pill-in {
+  from { opacity: 0; transform: translateY(14px) rotate(-3deg) scale(0.94); }
+  to { opacity: 1; transform: translateY(0) rotate(0) scale(1); }
+}
+@keyframes skills-shimmer {
+  0% { transform: translateX(-130%) skewX(-18deg); }
+  100% { transform: translateX(340%) skewX(-18deg); }
+}
+.skills-shimmer {
+  position: absolute; top: 0; bottom: 0; width: 22%; pointer-events: none;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: skills-shimmer 8s var(--ease-soft) infinite;
+}
+
+/* ---------- Filter chips entrance ---------- */
+.js .chip:not(.pill-shown) { opacity: 0; }
+.chip.pill-shown { animation: pill-in calc(0.7s * var(--motion-scale)) var(--ease-spring) both; animation-delay: calc(var(--i, 0) * 25ms); }
+
+/* ---------- Featured badge shimmer ---------- */
+@keyframes badge-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.badge-featured {
+  background: linear-gradient(110deg, var(--a1), var(--a2) 30%, var(--a3) 55%, var(--a2) 75%, var(--a1));
+  background-size: 200% 100%;
+  animation: badge-shimmer 5s linear infinite;
+}
+
+/* ---------- Count-up fade ---------- */
+.stat-card .stat-suffix, .stat-card .stat-label { opacity: 0; transition: opacity calc(0.5s * var(--motion-scale)) var(--ease-soft); }
+.stat-card.counted .stat-suffix, .stat-card.counted .stat-label { opacity: 1; }
+
+/* ---------- Code typing cursor ---------- */
+.code-cursor {
+  display: inline-block; width: 8px; height: 1.1em; vertical-align: -0.18em;
+  background: var(--a2); border-radius: 2px;
+  animation: blink-soft 0.9s var(--ease-soft) infinite;
+}
+
+/* ---------- Nav underline ---------- */
+.nav-underline {
+  position: absolute; bottom: 0; height: 2px; border-radius: 2px;
+  background: var(--grad); opacity: 0;
+  transition: left 0.55s var(--ease-out), width 0.55s var(--ease-out), opacity 0.3s var(--ease-soft);
+}
+.nav-underline.active { opacity: 1; }
+
+/* ---------- Buttons: light sweep ---------- */
+.btn::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.22) 50%, transparent 70%);
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease-soft);
+}
+.btn:hover::after { transform: translateX(120%); }
+
+/* ---------- Project card image zoom ---------- */
+.project-media img { transition: transform calc(0.8s * var(--motion-scale)) var(--ease-soft); }
+.project-card:hover .project-media img { transform: scale(1.05); }
+
+/* ---------- Filter FLIP ---------- */
+.project-card.hide-out { transition: opacity 0.35s var(--ease-soft), transform 0.35s var(--ease-soft); opacity: 0; transform: scale(0.85); }
+.project-card.flipping { transition: transform 0.55s var(--ease-out), opacity 0.45s var(--ease-out); }
+.project-card.flipping-in { animation: card-in 0.5s var(--ease-out) both; }
+@keyframes card-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- Grid children reveal (animation-based, transform-conflict-free) ---------- */
+/* Cards (projects/stats) never carry [data-reveal] — JS adds .card-in with stagger. */
+.js .card-reveal { opacity: 0; }
+.js .card-reveal.card-in {
+  animation: card-in calc(0.8s * var(--motion-scale)) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* ---------- Theme change ---------- */
+.theme-fading, .theme-fading *, .theme-fading *::before, .theme-fading *::after {
+  transition: background-color 0.5s var(--ease-soft), background 0.5s var(--ease-soft),
+              color 0.5s var(--ease-soft), border-color 0.5s var(--ease-soft),
+              box-shadow 0.5s var(--ease-soft), fill 0.5s var(--ease-soft) !important;
+}
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2147483646; }
+
+/* ---------- Language cross-fade ---------- */
+[data-lang-swap] [data-i18n], [data-lang-swap] [data-trans],
+[data-lang-swap] .nav-links a, [data-lang-swap] .m-link,
+[data-lang-swap] .typed, [data-lang-swap] .hero-greeting strong {
+  transition: opacity 0.15s var(--ease-soft); opacity: 0;
+}
+
+/* ---------- Mobile menu ---------- */
+.mobile-menu {
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.45s var(--ease-out), visibility 0.45s;
+}
+.mobile-menu.open { opacity: 1; visibility: visible; }
+.mobile-menu.open .m-link {
+  animation: m-link-in calc(0.7s * var(--motion-scale)) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 120ms);
+}
+.mobile-menu.open .mobile-socials .social-icon {
+  animation: m-link-in calc(0.7s * var(--motion-scale)) var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 520ms);
+}
+@keyframes m-link-in {
+  from { opacity: 0; transform: translateY(30px); filter: blur(6px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+.js .mobile-menu:not(.open) .m-link, .js .mobile-menu:not(.open) .mobile-socials .social-icon { opacity: 0; }
+
+/* ---------- Form focus ring ---------- */
+.field::after {
+  content: ""; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px;
+  border-radius: 2px; background: var(--grad);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.45s var(--ease-out);
+}
+.field:focus-within::after { transform: scaleX(1); }
+
+/* ---------- Back to top ---------- */
+.back-to-top {
+  opacity: 0; transform: translateY(16px) scale(0.9); pointer-events: none;
+  transition: opacity 0.4s var(--ease-soft), transform 0.4s var(--ease-spring);
+}
+.back-to-top.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.ring-fill { transition: stroke-dashoffset 0.2s linear; }
+
+/* ---------- Contact card hover lift ---------- */
+.contact-card { transition: transform 0.45s var(--ease-soft), box-shadow 0.45s var(--ease-soft), border-color 0.45s var(--ease-soft); }
+.contact-card:hover { transform: translateY(-4px); }
+
+/* ---------- Underline grow on hover ---------- */
+.u-grow { position: relative; }
+.u-grow::after {
+  content: ""; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1.5px;
+  background: currentColor; transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+.u-grow:hover::after { transform: scaleX(1); }
+
+/* ---------- Reduced motion: opacity fades only ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.15s !important;
+    transition-delay: 0s !important;
+  }
+  .js [data-reveal]:not(.revealed) {
+    opacity: 0; transform: none !important; filter: none !important; clip-path: none !important;
+  }
+  .js [data-reveal].revealed { transition: opacity 0.4s ease !important; }
+  .blob, .skills-shimmer, .badge-featured,
+  .orbit-ring-cw, .orbit-ring-ccw, .orbit-item.orbit-live, .orbit-track,
+  .orbit-slot.in-cw, .orbit-slot.in-ccw, .avatar-ring { animation: none !important; }
+  .js .orbit-ring, .js .orbit-item { opacity: 1; }
+}

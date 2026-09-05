@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sarvarbek Saparbayev — Flutter & Mobile Developer</title>
+  <meta name="description" content="Sarvarbek Saparbayev — Mobile Developer (Flutter & Android) with 2+ years of experience. Real-time chat, payments, clean architecture. Apps shipped to Play Store and App Store." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sarvarbek Saparbayev — Flutter & Mobile Developer" />
+  <meta property="og:description" content="Mobile Developer building fast, reliable apps with Flutter — real-time chat, secure payments, clean architecture." />
+  <meta property="og:image" content="assets/project-placeholder.png" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322c55e'/%3E%3Cstop offset='0.5' stop-color='%233b82f6'/%3E%3Cstop offset='1' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%230e1016'/%3E%3Ctext x='32' y='42' font-family='Space Grotesk,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='url(%23g)'%3ESS%3C/text%3E%3C/svg%3E" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <script>
+    (function () {
+      document.documentElement.classList.replace("no-js", "js");
+      // Apply saved theme before first paint to avoid a flash
+      try {
+        var th = localStorage.getItem("theme");
+        if (!th) th = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", th);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Preloader -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-avatar">
+      <img src="assets/avatar.gif" onerror="this.onerror=null;this.src='assets/avatar.jpg'" alt="" width="110" height="110" />
+    </div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"><span class="cursor-label" id="cursorLabel"></span></div>
+
+  <!-- Ambient background -->
+  <div class="ambient" aria-hidden="true">
+    <div class="ambient-grid"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Scroll progress -->
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+  <a class="skip-link" href="#home" data-i18n="skipTo">Skip to content</a>
+
+  <!-- Navbar -->
+  <header class="navbar" id="navbar">
+    <nav class="nav-inner container" aria-label="Main navigation">
+      <a class="nav-brand" href="#home">Sarvar Saparbayev</a>
+
+      <ul class="nav-links" id="navLinks">
+        <!-- links rendered by JS -->
+        <span class="nav-underline" id="navUnderline" aria-hidden="true"></span>
+      </ul>
+
+      <div class="nav-actions">
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button class="lang-btn lang-en active" data-lang="en" type="button">EN</button>
+          <button class="lang-btn lang-uz" data-lang="uz" type="button">UZ</button>
+          <span class="lang-knob" id="langKnob" aria-hidden="true"></span>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" data-i18n-aria="themeToLight">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5" />
+            <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" />
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M20.5 14.5A8.5 8.5 0 1 1 9.5 3.5a7 7 0 0 0 11 11z" />
+          </svg>
+        </button>
+
+        <div class="nav-socials" id="navSocials"><!-- socials rendered by JS --></div>
+
+        <button class="hamburger" id="hamburger" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu" data-i18n-aria="menuOpen">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+      <ul id="mobileLinks"><!-- rendered by JS --></ul>
+      <div class="mobile-socials" id="mobileSocials"><!-- rendered by JS --></div>
+    </nav>
+  </div>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero section" id="home">
+      <div class="hero-glow" id="heroGlow" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="hero-greeting hero-el"><span data-i18n="heroGreeting">Hello, I'm</span> <strong>Sarvarbek Saparbayev</strong></p>
+          <h1 class="hero-title hero-el"><span class="typed" id="typed"></span><span class="typed-cursor" aria-hidden="true"></span></h1>
+          <p class="hero-subtitle hero-el" data-i18n="heroSubtitle">I build fast, reliable mobile apps with real-time chat, secure payments and clean architecture — shipped to Play Store and App Store.</p>
+          <div class="hero-buttons hero-el">
+            <a class="btn btn-primary magnetic" href="#projects" data-i18n="viewProjects">View Projects</a>
+            <a class="btn btn-outline magnetic" href="assets/Sarvarbek_Saparbayev_CV.pdf" download="Sarvarbek_Saparbayev_CV.pdf" data-i18n="downloadCV">Download CV</a>
+          </div>
+          <div class="hero-socials hero-el" id="heroSocials"><!-- rendered by JS --></div>
+          <div class="hero-badge hero-el">
+            <span class="pulse-dot" aria-hidden="true"></span>
+            <span data-i18n="heroBadge">Urgench, Uzbekistan · Open to remote work</span>
+          </div>
+        </div>
+
+        <div class="hero-visual hero-el" id="heroVisual">
+          <div class="avatar-wrap" id="avatarWrap">
+            <div class="avatar-ring" aria-hidden="true"></div>
+            <div class="avatar-glow" aria-hidden="true"></div>
+            <img class="avatar" id="avatarImg" src="assets/avatar.gif" onerror="this.onerror=null;this.src='assets/avatar.jpg'" alt="Portrait of Sarvarbek Saparbayev" width="260" height="260" />
+          </div>
+          <div class="orbit-field" id="orbitField" aria-hidden="true">
+            <!-- floating icons rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats section" aria-label="Key facts">
+      <div class="container stats-grid" id="statsGrid"><!-- rendered by JS --></div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about section" id="about">
+      <div class="container">
+        <div class="section-head" data-reveal="split-words">
+          <h2 class="section-title" data-i18n="aboutTitle">About Me</h2>
+        </div>
+        <div class="about-grid">
+          <div class="about-text">
+            <p class="lead" data-reveal="blur-up" data-i18n="aboutLead"></p>
+            <p data-reveal="blur-up" data-i18n="aboutP2"></p>
+            <p data-reveal="blur-up" data-i18n="aboutP3"></p>
+            <h3 class="skills-heading" data-reveal="blur-up" data-i18n="skillsTitle">Skills & Technologies</h3>
+            <div class="skill-groups" id="skillGroups"><!-- rendered by JS --></div>
+          </div>
+          <div class="about-code" data-reveal="slide-right">
+            <div class="code-card" id="codeCard" aria-label="Code introduction">
+              <div class="code-header">
+                <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                <span class="code-filename">developer.dart</span>
+              </div>
+              <pre class="code-body"><code id="codeBody"></code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="experience section" id="experience">
+      <div class="container">
+        <div class="section-head" data-reveal="split-words">
+          <h2 class="section-title" data-i18n="expTitle">Experience</h2>
+        </div>
+        <div class="timeline" id="timeline">
+          <div class="timeline-line" aria-hidden="true"><span class="timeline-progress" id="timelineProgress"></span></div>
+          <!-- items rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="projects section" id="projects">
+      <div class="container">
+        <div class="section-head" data-reveal="split-words">
+          <h2 class="section-title" data-i18n="projectsTitle">My Projects</h2>
+          <p class="section-sub" data-i18n="projectsSubtitle"></p>
+        </div>
+        <div class="filter-chips" id="filterChips" role="tablist" aria-label="Filter projects"><!-- rendered by JS --></div>
+        <div class="projects-grid" id="projectsGrid"><!-- rendered by JS --></div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact section" id="contact">
+      <div class="container">
+        <div class="section-head" data-reveal="split-words">
+          <h2 class="section-title" data-i18n="contactTitle">Let's Work Together</h2>
+          <p class="section-sub" data-i18n="contactSubtitle"></p>
+        </div>
+        <div class="contact-grid">
+          <div class="contact-cards" id="contactCards" data-reveal="scale-in" data-stagger="70"><!-- rendered by JS --></div>
+          <form class="contact-form" id="contactForm" data-reveal="scale-in" novalidate>
+            <div class="field">
+              <input type="text" id="cfName" name="name" placeholder=" " autocomplete="name" required />
+              <label for="cfName" data-i18n="formName">Name</label>
+            </div>
+            <div class="field">
+              <input type="email" id="cfEmail" name="email" placeholder=" " autocomplete="email" required />
+              <label for="cfEmail" data-i18n="formEmail">Email</label>
+            </div>
+            <div class="field">
+              <textarea id="cfMessage" name="message" rows="5" placeholder=" " required></textarea>
+              <label for="cfMessage" data-i18n="formMessage">Message</label>
+            </div>
+            <button type="submit" class="btn btn-primary magnetic form-send" data-i18n="formSend">Send</button>
+            <p class="form-note" id="formNote" role="status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-text">© 2025 Sarvarbek Saparbayev · <span class="gradient-text" data-i18n="footerText">Flutter & Mobile Developer</span></p>
+      <div class="footer-socials" id="footerSocials"><!-- rendered by JS --></div>
+      <p class="footer-made" data-i18n="madeWith">Designed & built with care</p>
+    </div>
+    <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top" data-i18n-aria="backToTop">
+      <svg viewBox="0 0 44 44" class="ring-svg" aria-hidden="true">
+        <circle class="ring-track" cx="22" cy="22" r="20" />
+        <circle class="ring-fill" id="ringFill" cx="22" cy="22" r="20" stroke="url(#ringGrad)" />
+      </svg>
+      <svg class="arrow-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+    </button>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
