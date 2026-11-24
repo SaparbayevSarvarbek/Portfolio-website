@@ -40,7 +40,7 @@ const DATA = {
     themeToDark:  { en: "Switch to dark theme",  uz: "Tungi temaga oʻtish" },
     skipTo:       { en: "Skip to content",      uz: "Tarkibga oʻtish" },
 
-    heroGreeting: { en: "Hello, I'm", uz: "Salom, men" },
+    heroGreeting: { en: "Hello, I'm", uz: "Assalomu alaykum, men" },
     heroBadge:    { en: "Urgench, Uzbekistan · Open to remote work", uz: "Urganch, Oʻzbekiston · Masofaviy ishlarga ochiq" },
     heroSubtitle: {
       en: "I build fast, reliable mobile apps with real-time chat, secure payments and clean architecture — shipped to Play Store and App Store.",
@@ -68,7 +68,7 @@ const DATA = {
     },
     aboutP2: {
       en: "I care about clean, maintainable code: Clean Architecture, SOLID, Bloc/Cubit, and solid API design with REST and WebSocket. I work closely with backend teams to make data flow fast and reliable, and I optimize apps until they feel instant.",
-      uz: "Toza, qoʻllab-quvvatlanadigan kodga e'tibor beraman: Clean Architecture, SOLID, Bloc/Cubit hamda REST va WebSocket bilan mustahkam API dizayni. Backend jamoalari bilan yaqin ishlab, ma'lumot oqimini tez va ishonchli qilaman — ilovalar darhol javob berguncha optimallashtiraman.",
+      uz: "Toza, qoʻllab-quvvatlanadigan kodga eʻtibor beraman: Clean Architecture, SOLID, Bloc/Cubit hamda REST va WebSocket bilan mustahkam API dizayni. Backend jamoalari bilan yaqin ishlab, maʻlumot oqimini tez va ishonchli qilaman — ilovalar darhol javob berguncha optimallashtiraman.",
     },
     aboutP3: {
       en: "Right now I'm growing in product teams and startups — shipping real features to real users. Always open to new projects, new teams and interesting problems.",
@@ -91,7 +91,7 @@ const DATA = {
     contactTitle: { en: "Let's Work Together", uz: "Birga Ishlaymiz" },
     contactSubtitle: {
       en: "Have a project or a role in mind? I usually reply within a day.",
-      uz: "Loyiha yoki lavozim haqida o'ylaganmisiz? Odatda bir kun ichida javob beraman.",
+      uz: "Loyiha yoki lavozim haqida oʻylaganmisiz? Odatda bir kun ichida javob beraman.",
     },
 
     formName:    { en: "Name",    uz: "Ism" },
@@ -103,7 +103,7 @@ const DATA = {
     footerText: { en: "Flutter & Mobile Developer", uz: "Flutter & Mobil Dasturchi" },
     backToTop:  { en: "Back to top", uz: "Yuqoriga" },
     view:       { en: "View", uz: "Koʻrish" },
-    madeWith:   { en: "Designed & built with care", uz: "E'tibor bilan dizaynlangan va qurilgan" },
+    madeWith:   { en: "Designed & built with care", uz: "Eʻtibor bilan dizaynlangan va qurilgan" },
 
     codeCard: [
       "const developer = {",
@@ -136,7 +136,7 @@ const DATA = {
       items: ["Flutter", "Android", "Localization", "Push Notifications (FCM)", "Background Service", "Foreground Service"] },
     { group: { en: "Architecture & State", uz: "Arxitektura va Holat" },
       items: ["Clean Architecture", "SOLID", "MVVM", "MVP", "Bloc / Cubit", "GetX", "Provider"] },
-    { group: { en: "Backend & Data", uz: "Backend va Ma'lumotlar" },
+    { group: { en: "Backend & Data", uz: "Backend va Maʻlumotlar" },
       items: ["REST API (Dio, Http)", "WebSocket", "Firebase", "SQLite"] },
     { group: { en: "Delivery", uz: "Yetkazib berish" },
       items: ["Git / GitHub", "CI/CD", "Play Store", "App Store"] },
@@ -146,7 +146,7 @@ const DATA = {
     {
       title: "Mobile Developer",
       company: "Business Brothers and Partners",
-      period: { en: "Oct 2025 – Dec 2026", uz: "Okt 2025 – Dek 2026" },
+      period: { en: "Oct 2025 – Dec 2025", uz: "Okt 2025 – Dek 2025" },
       points: [
         { en: "Building and maintaining production mobile apps in a product team.",
           uz: "Mahsulot jamoasida production mobil ilovalarni qurish va qoʻllab-quvvatlash." },
@@ -164,7 +164,7 @@ const DATA = {
         { en: "Optimized performance and code quality — reduced load time, improved stability",
           uz: "Samaradorlik va kod sifatini optimallashtirdim — yuklanish vaqti qisqardi, barqarorlik oshdi" },
         { en: "Collaborated with the backend team to improve API communication and data flow",
-          uz: "Backend jamoasi bilan hamkorlikda API aloqasi va ma'lumot oqimini yaxshiladim" },
+          uz: "Backend jamoasi bilan hamkorlikda API aloqasi va maʻlumot oqimini yaxshiladim" },
         { en: "Shipped multiple releases improving UX and overall reliability",
           uz: "UX va umumiy ishonchlilikni yaxshilaydigan bir nechta reliz chiqardim" },
       ],
@@ -175,7 +175,7 @@ const DATA = {
       period: { en: "2021 – 2025", uz: "2021 – 2025" },
       points: [
         { en: "Bachelor of Science in Computer Engineering.",
-          uz: "Kompyuter injiniringi bo'yicha bakalavr darajasi." },
+          uz: "Kompyuter injiniringi boʻyicha bakalavr darajasi." },
       ],
     },
   ],
@@ -204,7 +204,7 @@ const DATA = {
       title: "4RENT — Rental Listings Platform",
       desc: {
         en: "Post listings, upload photos and chat with buyers. Integrated Firebase Cloud Messaging for push notifications and combined REST API + WebSocket for a fast, responsive experience.",
-        uz: "E'lonlar joylash, fotosuratlar yuklash va xaridorlar bilan chat. Push xabarnomalar uchun Firebase Cloud Messaging integratsiyasi va tez tajriba uchun REST API + WebSocket kombinatsiyasi.",
+        uz: "Eʻlonlar joylash, fotosuratlar yuklash va xaridorlar bilan chat. Push xabarnomalar uchun Firebase Cloud Messaging integratsiyasi va tez tajriba uchun REST API + WebSocket kombinatsiyasi.",
       },
       category: "marketplace",
       featured: true,
@@ -228,7 +228,7 @@ const DATA = {
       title: "Jaloliddin Manguberdi — Virtual Tour",
       desc: {
         en: "Information app about the Jaloliddin Manguberdi monument with a 3D model view and a virtual tour via Google Maps.",
-        uz: "Jaloliddin Manguberdi yodgorligi haqida 3D model koʻrinishi va Google Maps orqali virtual tur bilan ma'lumot ilovasi.",
+        uz: "Jaloliddin Manguberdi yodgorligi haqida 3D model koʻrinishi va Google Maps orqali virtual tur bilan maʻlumot ilovasi.",
       },
       category: "travel",
       featured: false,
