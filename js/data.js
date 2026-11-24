@@ -44,7 +44,7 @@ const DATA = {
     heroBadge:    { en: "Urgench, Uzbekistan · Open to remote work", uz: "Urganch, Oʻzbekiston · Masofaviy ishlarga ochiq" },
     heroSubtitle: {
       en: "I build fast, reliable mobile apps with real-time chat, secure payments and clean architecture — shipped to Play Store and App Store.",
-      uz: "Men real-time chat, xavfsiz toʻlovlar va toza arxitektura bilan tez, ishonchli mobil ilovalar yarataman — Play Store va App Store uchun yetkazib berilgan.",
+      uz: "Men real-time chat, xavfsiz toʻlovlar va toza arxitektura bilan tez va ishonchli mobil ilovalar yarataman — ular Play Store va App Store'da chiqarilgan.",
     },
     viewProjects: { en: "View Projects", uz: "Loyihalarni koʻrish" },
     downloadCV:   { en: "Download CV",    uz: "CV yuklab olish" },
@@ -198,7 +198,7 @@ const DATA = {
       featured: true,
       image: "assets/demo-joytop.png",
       tags: ["Flutter", "WebSocket", "Payments", "Real-time Chat", "Clean Architecture"],
-      links: { github: "#", store: "#" },
+      links: null,
     },
     {
       title: "4RENT — Rental Listings Platform",
@@ -210,7 +210,7 @@ const DATA = {
       featured: true,
       image: "assets/demo-4rent.png",
       tags: ["Flutter", "FCM", "REST API", "WebSocket", "Firebase"],
-      links: { github: "#", store: "#" },
+      links: null,
     },
     {
       title: "Translate App",
@@ -222,7 +222,7 @@ const DATA = {
       featured: false,
       image: "assets/demo-translate.png",
       tags: ["Flutter", "Text-to-Speech", "Localization"],
-      links: { github: "#" },
+      links: null,
     },
     {
       title: "Jaloliddin Manguberdi — Virtual Tour",
@@ -234,7 +234,7 @@ const DATA = {
       featured: false,
       image: "assets/demo-manguberdi.png",
       tags: ["Flutter", "3D View", "Google Maps"],
-      links: { github: "#" },
+      links: { github: "https://github.com/SaparbayevSarvarbek/Jaloliddin-haykaliga-vertual-sayohat" },
     },
     {
       title: "Uzbekistan Travel",
@@ -246,7 +246,7 @@ const DATA = {
       featured: false,
       image: "assets/demo-uztravel.png",
       tags: ["Flutter", "REST API", "Admin Panel"],
-      links: { github: "#" },
+      links: { github: "https://github.com/SaparbayevSarvarbek/Uzbekistan" },
     },
     {
       title: "Logistics Management App (Ardent Soft)",
